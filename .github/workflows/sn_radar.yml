@@ -1,0 +1,70 @@
+name: sn_radar
+
+# Batch 2.1+2.2 (#3, #7) — Stacker News Opportunity Radar
+# 每 15 分鐘抓 SN GraphQL，找開放 bounty / 低競爭 thread
+# 結果寫 data/sn_opportunities/<UTC>.tsv 並 commit；新 OPEN_BOUNTY 開 issue
+#
+# 部署: cp 此檔 → relayhop/ClaudeEarnSelf-runtime/.github/workflows/sn_radar.yml
+# 同時推 scripts/sn_opportunity_radar.mjs 到 repo 的 scripts/ 路徑
+
+on:
+  schedule:
+    - cron: '3,18,33,48 * * * *'   # 偏移避開整點壅塞
+  workflow_dispatch: {}
+
+concurrency:
+  group: sn-radar
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run radar
+        id: radar
+        run: |
+          mkdir -p data/sn_opportunities
+          # 改寫輸出路徑
+          OUT_DIR=data/sn_opportunities node scripts/sn_opportunity_radar.mjs > /tmp/radar.out 2>&1 || true
+          cat /tmp/radar.out
+          # 偵測新 OPEN_BOUNTY (簡化: tag 欄位含字串)
+          LATEST=$(ls -t data/sn_opportunities/sn_*.tsv 2>/dev/null | head -1)
+          if [ -n "$LATEST" ]; then
+            BOUNTIES=$(awk -F'\t' '$6 ~ /OPEN_BOUNTY/' "$LATEST" | head -5)
+            echo "bounties<<EOF" >> $GITHUB_OUTPUT
+            echo "$BOUNTIES" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit changes
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add data/sn_opportunities/ || true
+          git diff --cached --quiet || git commit -m "sn_radar: scan $(date -u +%FT%TZ)"
+          git push || true
+
+      - name: Open issue if open bounty found
+        if: steps.radar.outputs.bounties != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = `New SN OPEN_BOUNTY detected:\n\n\`\`\`\n${{ steps.radar.outputs.bounties }}\n\`\`\``;
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `[radar] SN open bounty ${new Date().toISOString().slice(0,16)}`,
+              body,
+              labels: ['radar', 'sn']
+            });
