@@ -1,16 +1,20 @@
 name: sn_radar
 
-# Batch 2.1+2.2 (#3, #7) — Stacker News Opportunity Radar
-# 每 15 分鐘抓 SN GraphQL，找開放 bounty / 低競爭 thread
-# 結果寫 data/sn_opportunities/<UTC>.tsv 並 commit；新 OPEN_BOUNTY 開 issue
-#
-# 部署: cp 此檔 → relayhop/ClaudeEarnSelf-runtime/.github/workflows/sn_radar.yml
-# 同時推 scripts/sn_opportunity_radar.mjs 到 repo 的 scripts/ 路徑
+# Batch 4 — Stacker News Opportunity Radar v2 (2026-05-03)
+# 每 15 分鐘 T1 (15 subs)；每小時 T1+T2 (36 subs)；每日 T1+T2+T3 (58 subs)
+# 累積 SIGNAL / SELF_POST_OPP 至 data/sn_targets_accumulated/
 
 on:
   schedule:
-    - cron: '3,18,33,48 * * * *'   # 偏移避開整點壅塞
-  workflow_dispatch: {}
+    - cron: '3,18,33,48 * * * *'   # T1 every 15 min
+    - cron: '7 * * * *'             # T1+T2 hourly (off-peak vs above)
+    - cron: '11 6 * * *'            # T1+T2+T3 daily 06:11Z
+  workflow_dispatch:
+    inputs:
+      tier:
+        description: 'tier(s) e.g. 1 / 1,2 / 1,2,3'
+        required: false
+        default: '1'
 
 concurrency:
   group: sn-radar
@@ -23,36 +27,59 @@ permissions:
 jobs:
   scan:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
+        with: { node-version: '22' }
 
-      - name: Run radar
+      - name: Pick tier from schedule
+        id: tier
+        run: |
+          INPUT="${{ inputs.tier }}"
+          CRON="${{ github.event.schedule }}"
+          if [ -n "$INPUT" ]; then
+            TIER="$INPUT"
+          elif [ "$CRON" = "11 6 * * *" ]; then
+            TIER="1,2,3"
+          elif [ "$CRON" = "7 * * * *" ]; then
+            TIER="1,2"
+          else
+            TIER="1"
+          fi
+          echo "tier=$TIER" >> $GITHUB_OUTPUT
+          echo "running tier: $TIER"
+
+      - name: Run radar v2
         id: radar
         run: |
-          mkdir -p data/sn_opportunities
-          # 改寫輸出路徑
-          OUT_DIR=data/sn_opportunities node scripts/sn_opportunity_radar.mjs > /tmp/radar.out 2>&1 || true
+          mkdir -p data/sn_opportunities data/sn_targets_accumulated
+          OUT_DIR=data/sn_opportunities \
+          ACCUM_DIR=data/sn_targets_accumulated \
+          node scripts/sn_radar_v2.mjs --tier ${{ steps.tier.outputs.tier }} > /tmp/radar.out 2>&1 || true
           cat /tmp/radar.out
-          # 偵測新 OPEN_BOUNTY (簡化: tag 欄位含字串)
           LATEST=$(ls -t data/sn_opportunities/sn_*.tsv 2>/dev/null | head -1)
           if [ -n "$LATEST" ]; then
-            BOUNTIES=$(awk -F'\t' '$6 ~ /OPEN_BOUNTY/' "$LATEST" | head -5)
-            echo "bounties<<EOF" >> $GITHUB_OUTPUT
-            echo "$BOUNTIES" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
+            # column 11 = tags in v2 schema
+            BOUNTIES=$(awk -F'\t' '$11 ~ /OPEN_BOUNTY/' "$LATEST" | head -5)
+            SIGNALS=$(awk -F'\t' '$11 ~ /SIGNAL/' "$LATEST" | head -5)
+            {
+              echo "bounties<<EOF"
+              echo "$BOUNTIES"
+              echo "EOF"
+              echo "signals<<EOF"
+              echo "$SIGNALS"
+              echo "EOF"
+            } >> $GITHUB_OUTPUT
           fi
 
       - name: Commit changes
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git add data/sn_opportunities/ || true
-          git diff --cached --quiet || git commit -m "sn_radar: scan $(date -u +%FT%TZ)"
+          git add data/ || true
+          git diff --cached --quiet || git commit -m "sn_radar v2 tier=${{ steps.tier.outputs.tier }} $(date -u +%FT%TZ)"
           git push || true
 
       - name: Open issue if open bounty found
@@ -66,5 +93,5 @@ jobs:
               repo: context.repo.repo,
               title: `[radar] SN open bounty ${new Date().toISOString().slice(0,16)}`,
               body,
-              labels: ['radar', 'sn']
+              labels: ['radar', 'sn', 'bounty']
             });
