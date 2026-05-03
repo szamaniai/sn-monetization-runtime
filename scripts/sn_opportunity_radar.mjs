@@ -20,6 +20,10 @@ const MAX_COMMENTS_FOR_LOW_COMP = 5;
 const LOOKBACK_HOURS = 24;
 
 // SN GraphQL items query — 只取需要欄位降低 payload
+// 2026-05-03 schema 升級：加 user.since/nitems 供 parent 篩選硬規則 #3 使用
+// 注意：SN User schema **沒有** lastSeenAt 欄位（已驗證 introspection）；
+// `since` 是 Int (語意未文件化，疑似 user 最近 item id 或 user row id)；
+// OP 真實 last_active 需另查 user 最近 item，radar 階段先輸出 since 供下游決策。
 const QUERY = `
 query items($sub: String, $sort: String, $when: String, $limit: Limit) {
   items(sub: $sub, sort: $sort, when: $when, limit: $limit) {
@@ -32,7 +36,7 @@ query items($sub: String, $sort: String, $when: String, $limit: Limit) {
       bounty
       bountyPaidTo
       ncomments
-      user { name }
+      user { name since nitems }
       sub { name }
     }
   }
@@ -64,11 +68,16 @@ function classify(item) {
   const tags = [];
   const bounty = Number(item.bounty || 0);
   const ncom = Number(item.ncomments || 0);
+  const score = Number(item.sats || 0);
   if (bounty >= MIN_BOUNTY_SATS && !item.bountyPaidTo) tags.push('OPEN_BOUNTY');
   if (bounty >= MIN_BOUNTY_SATS && !item.bountyPaidTo && ncom <= MAX_COMMENTS_FOR_LOW_COMP) tags.push('LOW_COMP');
   if (item.sub?.name === 'jobs') tags.push('JOB');
   if (ageHours <= 2) tags.push('FRESH');
-  if (Number(item.sats || 0) >= 1000) tags.push('HOT');
+  if (score >= 1000) tags.push('HOT');
+  // 2026-05-03 新標籤 — 對應 CLAUDE.md 硬規則 #3「高訊噪比熱貼」
+  // score >= 100 AND ncom <= 0.3 * score AND age <= 12h
+  // (OP last_active 因 schema 限制無法在 radar 階段驗證；下游 reply 流程自行查 OP 最近 item)
+  if (score >= 100 && ncom <= 0.3 * score && ageHours <= 12) tags.push('SIGNAL');
   return { tags, ageHours };
 }
 
@@ -110,10 +119,17 @@ function classify(item) {
   } else {
     const tsvPath = path.join(out, `sn_${ts}.tsv`);
     const lines = [
-      '# id\tsub\tbounty\tncom\tageH\ttags\ttitle',
+      '# id\tsub\tscore\tbounty\tncom\tageH\top_since\top_nitems\ttags\ttitle',
       ...top.map(it => [
-        it.id, it.sub?.name || '-', it.bounty || 0, it.ncomments || 0,
-        it._ageH, it._tags.join(','),
+        it.id,
+        it.sub?.name || '-',
+        it.sats || 0,
+        it.bounty || 0,
+        it.ncomments || 0,
+        it._ageH,
+        it.user?.since ?? '-',
+        it.user?.nitems ?? '-',
+        it._tags.join(','),
         (it.title || '').replace(/[\t\n]/g, ' ').slice(0, 100),
       ].join('\t')),
     ];
