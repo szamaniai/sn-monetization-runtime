@@ -1,0 +1,44 @@
+name: trending_topics
+
+# Pulls HN top + SN top/recent → extracts keywords → flags RISING topics
+# Cron: 4x/day at Taipei 00/06/12/18 = UTC 16/22/04/10
+
+on:
+  schedule:
+    - cron: '0 4,10,16,22 * * *'
+  workflow_dispatch: {}
+
+concurrency:
+  group: trending
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run trending
+        run: |
+          mkdir -p data/trending
+          node scripts/trending_topics.mjs
+
+      - name: Commit if changed
+        run: |
+          git config user.name  'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          if [[ -n "$(git status --porcelain data/trending)" ]]; then
+            git add data/trending
+            git commit -m "trending: scan $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            git push
+          else
+            echo "[trending] no changes"
+          fi
