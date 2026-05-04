@@ -1,16 +1,16 @@
 {
-  "snapshot_at": "2026-05-04T04:10:16.943Z",
+  "snapshot_at": "2026-05-04T16:15:28.911Z",
   "user": "366aad5d38",
   "stats": {
-    "total_items": 52,
+    "total_items": 56,
     "total_self_posts": 4,
-    "total_comments": 48,
-    "total_cost": 231,
-    "total_gross_earned": 1295,
-    "total_comment_sats_under_my_posts": 180,
+    "total_comments": 52,
+    "total_cost": 253,
+    "total_gross_earned": 1316,
+    "total_comment_sats_under_my_posts": 201,
     "free_items": 10,
-    "paid_items": 42,
-    "earning_items": 7,
+    "paid_items": 46,
+    "earning_items": 8,
     "by_sub": {
       "bitcoin": {
         "count": 3,
@@ -18,9 +18,9 @@
         "gross": 717
       },
       "-": {
-        "count": 49,
-        "cost": 141,
-        "gross": 578
+        "count": 53,
+        "cost": 163,
+        "gross": 599
       }
     },
     "earners": [
@@ -70,6 +70,15 @@
         "title": ""
       },
       {
+        "id": "1483899",
+        "kind": "comment",
+        "sub": "-",
+        "cost": 1,
+        "sats": 21,
+        "parentId": 1483820,
+        "title": ""
+      },
+      {
         "id": "1481995",
         "kind": "comment",
         "sub": "-",
@@ -88,8 +97,8 @@
         "title": ""
       }
     ],
-    "estimated_net_received": 906,
-    "estimated_net_pl": 675,
-    "gross_pl": 1064
+    "estimated_net_received": 921,
+    "estimated_net_pl": 668,
+    "gross_pl": 1063
   }
 }

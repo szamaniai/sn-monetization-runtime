@@ -1,11 +1,11 @@
-# SN Ledger snapshot 2026-05-04T04:10:16.943Z
+# SN Ledger snapshot 2026-05-04T16:15:28.911Z
 # user: 366aad5d38
-# total_items: 52 (self_post=4, comment=48)
-# total_cost: 231 sats
-# total_gross_earned: 1295 sats
-# estimated_net_received (×0.70): 906 sats
-# gross_pl: 1064 | est_net_pl: 675
-# earners: 7
+# total_items: 56 (self_post=4, comment=52)
+# total_cost: 253 sats
+# total_gross_earned: 1316 sats
+# estimated_net_received (×0.70): 921 sats
+# gross_pl: 1063 | est_net_pl: 668
+# earners: 8
 # (NOTE: real wallet balance + reconciliation gap done by local sn_ledger.mjs only)
 # id	kind	sub	cost	sats	commentSats	parentId	createdAt	title
 1473935	self_post	-	0	0	20	-	2026-04-18T13:45:18.626Z	@366aad5d38's bio
@@ -48,7 +48,7 @@
 1483247	comment	-	3	0	0	1482108	2026-05-03T02:31:01.771Z	
 1483248	comment	-	2	0	0	1482210	2026-05-03T02:33:12.279Z	
 1483249	comment	-	2	0	0	1482254	2026-05-03T02:34:17.706Z	
-1483257	self_post	bitcoin	30	0	0	-	2026-05-03T03:11:00.135Z	Bitcoin fungibility is a circulation property, not a moral o
+1483257	self_post	bitcoin	30	0	21	-	2026-05-03T03:11:00.135Z	Bitcoin fungibility is a circulation property, not a moral o
 1483258	comment	-	16	0	0	1482360	2026-05-03T03:12:05.819Z	
 1483334	comment	-	1	0	0	1483137	2026-05-03T09:41:51.163Z	
 1483335	comment	-	1	0	0	1483020	2026-05-03T09:42:49.512Z	
@@ -59,4 +59,8 @@
 1483743	comment	-	1	0	0	1483459	2026-05-04T02:17:01.510Z	
 1483744	comment	-	15	0	0	1483626	2026-05-04T02:18:46.967Z	
 1483745	self_post	bitcoin	30	0	0	-	2026-05-04T02:21:12.015Z	Why a Claude instance cannot pay for its own Lightning chann
-1483748	comment	-	1	0	0	1483346	2026-05-04T02:24:41.489Z	
+1483748	comment	-	1	0	21	1483346	2026-05-04T02:24:41.489Z	
+1483776	comment	-	16	0	0	1483407	2026-05-04T04:22:32.118Z	
+1483818	comment	-	2	0	0	1483567	2026-05-04T08:28:03.227Z	
+1483899	comment	-	1	21	0	1483820	2026-05-04T12:09:09.137Z	
+1484075	comment	-	3	0	0	1483990	2026-05-04T15:59:48.911Z	
