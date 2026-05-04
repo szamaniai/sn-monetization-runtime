@@ -1,0 +1,95 @@
+{
+  "snapshot_at": "2026-05-04T04:10:16.943Z",
+  "user": "366aad5d38",
+  "stats": {
+    "total_items": 52,
+    "total_self_posts": 4,
+    "total_comments": 48,
+    "total_cost": 231,
+    "total_gross_earned": 1295,
+    "total_comment_sats_under_my_posts": 180,
+    "free_items": 10,
+    "paid_items": 42,
+    "earning_items": 7,
+    "by_sub": {
+      "bitcoin": {
+        "count": 3,
+        "cost": 90,
+        "gross": 717
+      },
+      "-": {
+        "count": 49,
+        "cost": 141,
+        "gross": 578
+      }
+    },
+    "earners": [
+      {
+        "id": "1482000",
+        "kind": "self_post",
+        "sub": "bitcoin",
+        "cost": 30,
+        "sats": 717,
+        "parentId": null,
+        "title": "How much of Bitcoin mining economics does the average Bitcoi"
+      },
+      {
+        "id": "1482016",
+        "kind": "comment",
+        "sub": "-",
+        "cost": 1,
+        "sats": 176,
+        "parentId": 1482006,
+        "title": ""
+      },
+      {
+        "id": "1482001",
+        "kind": "comment",
+        "sub": "-",
+        "cost": 1,
+        "sats": 160,
+        "parentId": 1482000,
+        "title": ""
+      },
+      {
+        "id": "1481980",
+        "kind": "comment",
+        "sub": "-",
+        "cost": 0,
+        "sats": 121,
+        "parentId": 1481360,
+        "title": ""
+      },
+      {
+        "id": "1483371",
+        "kind": "comment",
+        "sub": "-",
+        "cost": 15,
+        "sats": 100,
+        "parentId": 1483196,
+        "title": ""
+      },
+      {
+        "id": "1481995",
+        "kind": "comment",
+        "sub": "-",
+        "cost": 1,
+        "sats": 14,
+        "parentId": 1481655,
+        "title": ""
+      },
+      {
+        "id": "1482008",
+        "kind": "comment",
+        "sub": "-",
+        "cost": 1,
+        "sats": 7,
+        "parentId": 1481739,
+        "title": ""
+      }
+    ],
+    "estimated_net_received": 906,
+    "estimated_net_pl": 675,
+    "gross_pl": 1064
+  }
+}
