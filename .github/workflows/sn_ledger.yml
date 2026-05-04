@@ -1,0 +1,49 @@
+name: sn_ledger
+
+# Daily snapshot of all my SN items (cost + gross sats earned)
+# Public-side only — uses anonymous GraphQL (item.cost / sats are public fields)
+# Wallet balance reconciliation is done locally (separate launchd) for sec reasons
+# Outputs: data/ledger/YYYY-MM-DD.tsv + ledger_latest.tsv + earnings_log.tsv
+
+on:
+  schedule:
+    - cron: '5 0 * * *'           # daily 00:05 UTC
+    - cron: '5 12 * * *'          # second pass at 12:05 UTC for mid-day delta
+  workflow_dispatch:
+    inputs:
+      sn_user:
+        description: 'SN username (default 366aad5d38)'
+        required: false
+        default: '366aad5d38'
+
+concurrency:
+  group: sn-ledger
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      SN_USER: ${{ inputs.sn_user || '366aad5d38' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+
+      - name: Run ledger snapshot
+        run: |
+          mkdir -p data/ledger
+          OUT_DIR=data/ledger node scripts/sn_ledger_cloud.mjs
+
+      - name: Commit snapshot
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add data/ledger/ || true
+          git diff --cached --quiet || git commit -m "sn_ledger snapshot $(date -u +%FT%TZ)"
+          git push || true
