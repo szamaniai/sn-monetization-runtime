@@ -159,6 +159,36 @@ function summarize(items) {
     ].join('\t') + '\n');
   }
 
+  // 5. Append-only balance/P&L history (one row per snapshot — time series)
+  // implied_balance = est_net_received − total_cost (without withdrawals)
+  // 真實 wallet balance 與此值的差距 = 提幣總額 + 抽成比例誤差
+  const balLog = path.join(outDir, 'balance_history.tsv');
+  if (!fs.existsSync(balLog)) {
+    fs.writeFileSync(balLog,
+      '# snapshot_at\ttotal_items\ttotal_cost\ttotal_gross\test_net_received\timplied_balance\tearners\tnew_earners_24h\tnew_cost_24h\tnew_gross_24h\n');
+  }
+  // diff vs 24h ago — count items created in last 24h
+  const cutoff24h = Date.now() - 24*3600*1000;
+  let new_cost_24h = 0, new_gross_24h = 0, new_earners_24h = 0;
+  for (const it of items) {
+    if (new Date(it.createdAt).getTime() < cutoff24h) continue;
+    new_cost_24h += +it.cost || 0;
+    new_gross_24h += +it.sats || 0;
+    if ((+it.sats || 0) > 0) new_earners_24h++;
+  }
+  fs.appendFileSync(balLog, [
+    ts.toISOString(),
+    stats.total_items,
+    stats.total_cost,
+    stats.total_gross_earned,
+    stats.estimated_net_received,
+    stats.estimated_net_pl,  // implied_balance
+    stats.earning_items,
+    new_earners_24h,
+    new_cost_24h,
+    new_gross_24h,
+  ].join('\t') + '\n');
+
   console.log(`[ledger] wrote ${tsvPath} (${items.length} items)`);
   console.log(JSON.stringify({
     items: stats.total_items,
