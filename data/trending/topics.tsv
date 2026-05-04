@@ -1,42 +1,42 @@
 # topic	sources	score	seen_in_sn	rising_flag
-# generated 2026-05-03T18:38:20.073Z; n=40
-what	sn:AI	5.45	yes	
-haskell	hn	4.06	no	RISING
-jane goodall	sn:science	3.68	no	RISING
-famous last words	sn:science	3.68	no	RISING
-planet	sn:science	3.68	no	RISING
-thing	sn:science	3.68	no	RISING
-game review	sn:gaming	3.61	no	RISING
-hypnospace outlaw	sn:gaming	3.61	no	RISING
-show	hn	3.44	no	RISING
-conquest	sn:Travel	3.29	no	RISING
-mount torlesse	sn:Travel	3.29	no	RISING
-from austin	sn:meta	3.11	yes	
-my small town	sn:meta	3.11	yes	
-india	sn:meta	3.11	yes	
-thank you	sn:meta	3.11	yes	
-cowboy hat	sn:meta	3.11	yes	
-enclavia	sn:openagents	3.04	no	RISING
-provable	sn:openagents	3.04	no	RISING
-docker	sn:openagents	3.04	no	RISING
-one bourbon	sn:Music	2.89	no	RISING
-one scotch	sn:Music	2.89	no	RISING
-one beer	sn:Music	2.89	no	RISING
-survivor pool	sn:Stacker_Sports	2.89	no	RISING
-week	sn:Stacker_Sports	2.89	no	RISING
-the spread	sn:charts_and_maps	2.84	no	RISING
-christianity	sn:charts_and_maps	2.84	no	RISING
-every year	sn:charts_and_maps	2.84	no	RISING
-evolution	sn:gaming	2.8	no	RISING
+# generated 2026-05-04T08:05:35.996Z; n=40
+round	sn:Stacker_Sports	5.2	no	RISING
+will	sn:bitcoin	3.4	yes	
+scott aaronson	sn:bitcoin	3.4	yes	
+from austin	sn:meta	3.37	yes	
+my small town	sn:meta	3.37	yes	
+india	sn:meta	3.37	yes	
+thank you	sn:meta	3.37	yes	
+cowboy hat	sn:meta	3.37	yes	
+what	sn:math	3.19	yes	
+another full marathon	sn:HealthAndFitness	3.15	no	RISING
+books	sn:HealthAndFitness	3.15	no	RISING
+survivor pool	sn:Stacker_Sports	3	no	RISING
+week	sn:Stacker_Sports	3	no	RISING
+reimbursement	sn:bitcoin_beginners	2.99	no	RISING
+bisq network	sn:bitcoin_beginners	2.99	no	RISING
+another lazy sunday	sn:history	2.84	no	RISING
+another piece	sn:history	2.84	no	RISING
+honking farm metal	sn:history	2.84	no	RISING
+mercedes-benz	hn	2.83	no	RISING
+playoff points challenge	sn:Stacker_Sports	2.76	no	RISING
+round updates	sn:Stacker_Sports	2.76	no	RISING
+round picks	sn:Stacker_Sports	2.76	no	RISING
 someone	sn:Stacker_Sports	2.76	no	RISING
 joel embiid	sn:Stacker_Sports	2.76	no	RISING
-playoff points challenge	sn:Stacker_Sports	2.72	no	RISING
-round updates	sn:Stacker_Sports	2.72	no	RISING
-round picks	sn:Stacker_Sports	2.72	no	RISING
-richard dawkins	sn:AI	2.72	yes	
-claude	sn:AI	2.72	yes	
-this month	hn	2.67	no	RISING
-ladybird	hn	2.67	no	RISING
-april	hn	2.67	yes	
+oscars	sn:AI	2.74	yes	
+sinner	sn:Stacker_Sports	2.72	no	RISING
+zverev	sn:Stacker_Sports	2.72	no	RISING
+minutes	sn:Stacker_Sports	2.72	no	RISING
+madrid open	sn:Stacker_Sports	2.72	no	RISING
+animal farm film	sn:movies	2.66	no	RISING
+hollywood perversion of orwell	sn:movies	2.66	no	RISING
+anti-communist classic	sn:movies	2.66	no	RISING
+porco rosso	sn:art	2.66	no	RISING
+fudenosuke	sn:art	2.66	no	RISING
+sunday survey	sn:bitcoin	2.65	yes	
 daily discussion thread	sn:Music	2.64	no	RISING
 music saloon	sn:Music	2.64	no	RISING
+claude code	hn	2.61	no	RISING
+drop everything	sn:food_and_drinks	2.6	no	RISING
+take	sn:food_and_drinks	2.6	no	RISING
