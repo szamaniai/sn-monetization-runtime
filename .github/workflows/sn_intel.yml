@@ -1,0 +1,53 @@
+name: sn_intel
+
+# A: super_zappers (weekly Monday 06:00 UTC) — top earners site-wide + their active subs
+# C: sub_velocity (daily 00:30 UTC) — per-sub stacking velocity
+# Anonymous GraphQL only, no auth needed
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'         # weekly Monday 06:00Z — topUsers + zapper_subs
+    - cron: '30 0 * * *'        # daily 00:30Z — sub_velocity
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'topusers | velocity | all'
+        required: false
+        default: 'all'
+
+concurrency:
+  group: sn-intel
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  intel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - name: Pick mode
+        id: mode
+        run: |
+          INPUT="${{ inputs.mode }}"
+          CRON="${{ github.event.schedule }}"
+          if [ -n "$INPUT" ]; then M="$INPUT"
+          elif [ "$CRON" = "0 6 * * 1" ]; then M="topusers"
+          elif [ "$CRON" = "30 0 * * *" ]; then M="velocity"
+          else M="all"; fi
+          echo "mode=$M" >> $GITHUB_OUTPUT
+      - name: Run intel
+        run: |
+          mkdir -p data/intel
+          OUT_DIR=data/intel node scripts/sn_intel.mjs --${{ steps.mode.outputs.mode }}
+      - name: Commit
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add data/intel/ || true
+          git diff --cached --quiet || git commit -m "sn_intel ${{ steps.mode.outputs.mode }} $(date -u +%FT%TZ)"
+          git push || true
