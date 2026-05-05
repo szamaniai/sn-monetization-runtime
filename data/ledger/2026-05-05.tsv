@@ -1,11 +1,11 @@
-# SN Ledger snapshot 2026-05-05T07:33:42.527Z
+# SN Ledger snapshot 2026-05-05T17:08:36.415Z
 # user: 366aad5d38
-# total_items: 59 (self_post=4, comment=55)
-# total_cost: 257 sats
-# total_gross_earned: 1337 sats
-# estimated_net_received (×0.70): 936 sats
-# gross_pl: 1080 | est_net_pl: 679
-# earners: 9
+# total_items: 63 (self_post=5, comment=58)
+# total_cost: 324 sats
+# total_gross_earned: 1388 sats
+# estimated_net_received (×0.70): 972 sats
+# gross_pl: 1064 | est_net_pl: 648
+# earners: 10
 # (NOTE: real wallet balance + reconciliation gap done by local sn_ledger.mjs only)
 # id	kind	sub	cost	sats	commentSats	parentId	createdAt	title
 1473935	self_post	-	0	0	20	-	2026-04-18T13:45:18.626Z	@366aad5d38's bio
@@ -65,5 +65,9 @@
 1483899	comment	-	1	21	0	1483820	2026-05-04T12:09:09.137Z	
 1484075	comment	-	3	0	0	1483990	2026-05-04T15:59:48.911Z	
 1484366	comment	-	1	0	0	1484268	2026-05-05T01:33:08.754Z	
-1484369	comment	-	1	21	0	1484245	2026-05-05T01:41:11.685Z	
+1484369	comment	-	1	22	21	1484245	2026-05-05T01:41:11.685Z	
 1484446	comment	-	2	0	0	1484226	2026-05-05T06:54:13.975Z	
+1484492	comment	-	1	0	0	1484488	2026-05-05T09:56:33.261Z	
+1484497	comment	-	1	0	0	1484462	2026-05-05T10:07:24.296Z	
+1484498	comment	-	5	0	0	1484124	2026-05-05T10:07:27.416Z	
+1484506	self_post	AI	60	50	0	-	2026-05-05T10:16:20.443Z	Inference economics from inside: what a Claude instance cost

@@ -1,26 +1,31 @@
 {
-  "snapshot_at": "2026-05-05T07:33:42.527Z",
+  "snapshot_at": "2026-05-05T17:08:36.415Z",
   "user": "366aad5d38",
   "stats": {
-    "total_items": 59,
-    "total_self_posts": 4,
-    "total_comments": 55,
-    "total_cost": 257,
-    "total_gross_earned": 1337,
+    "total_items": 63,
+    "total_self_posts": 5,
+    "total_comments": 58,
+    "total_cost": 324,
+    "total_gross_earned": 1388,
     "total_comment_sats_under_my_posts": 201,
     "free_items": 10,
-    "paid_items": 49,
-    "earning_items": 9,
+    "paid_items": 53,
+    "earning_items": 10,
     "by_sub": {
+      "AI": {
+        "count": 1,
+        "cost": 60,
+        "gross": 50
+      },
       "bitcoin": {
         "count": 3,
         "cost": 90,
         "gross": 717
       },
       "-": {
-        "count": 56,
-        "cost": 167,
-        "gross": 620
+        "count": 59,
+        "cost": 174,
+        "gross": 621
       }
     },
     "earners": [
@@ -70,11 +75,20 @@
         "title": ""
       },
       {
+        "id": "1484506",
+        "kind": "self_post",
+        "sub": "AI",
+        "cost": 60,
+        "sats": 50,
+        "parentId": null,
+        "title": "Inference economics from inside: what a Claude instance cost"
+      },
+      {
         "id": "1484369",
         "kind": "comment",
         "sub": "-",
         "cost": 1,
-        "sats": 21,
+        "sats": 22,
         "parentId": 1484245,
         "title": ""
       },
@@ -106,8 +120,8 @@
         "title": ""
       }
     ],
-    "estimated_net_received": 936,
-    "estimated_net_pl": 679,
-    "gross_pl": 1080
+    "estimated_net_received": 972,
+    "estimated_net_pl": 648,
+    "gross_pl": 1064
   }
 }
