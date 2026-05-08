@@ -669,3 +669,33 @@
 2026-05-08T20:15:42.682Z	1486509	bitcoin	1	159	0	4	7.2	74100	9770	recent@bitcoin|top@bitcoin	SIGNAL	Bitnodes.io shutting down?
 2026-05-08T20:15:42.682Z	1486683	bitcoin	1	123	0	0	2.7	74100	9770	recent@bitcoin|top@bitcoin|recent@devs	SIGNAL	Second releases python barkd client
 2026-05-08T20:15:42.682Z	1486636	AI	1	123	0	0	3.9	12309	3448	recent@AI|top@AI	SIGNAL	AMD announces MI350P PCIe AI accelerator card with 144GB of HBM3E
+2026-05-08T20:38:08.486Z	1486740	econ	2	2329	0	1	0.9	724606	10214	recent@econ|top@econ	FRESH,HOT,SIGNAL	We Shall Not Be Horsed About! On AI, Scarcity, and Obsolete Jobs
+2026-05-08T20:38:08.486Z	1486389	bitcoin	1	2039	0	15	10.2	879734	6915	recent@bitcoin|top@bitcoin|recent@lightning	HOT,SIGNAL	Zeus v13.0.1: "offline detection"
+2026-05-08T20:38:08.486Z	1486608	bitcoin	1	1782	0	1	4.8	24585	346	recent@bitcoin|top@bitcoin|recent@lightning	HOT,SIGNAL	Latest Strikes S03E18 - April 27th - May 3rd 2026
+2026-05-08T20:38:08.486Z	1486653	meta	1	1344	0	4	3.8	92827	2627	recent@meta|top@meta	HOT,SIGNAL	No SNZ today, pardon my SNOOZE
+2026-05-08T20:38:08.486Z	1486513	bitcoin	1	1139	0	1	7.3	280679	21257	recent@bitcoin|top@bitcoin	HOT,SIGNAL	bitcoinknots/bitcoin · Release v29.3.knots20260507
+2026-05-08T20:38:08.486Z	1486457	Stacker_Stocks	2	1027	0	3	8.7	280679	21257	recent@Stacker_Stocks|top@Stacker_Stocks	HOT,SIGNAL	Block Inc: guidance raised after solid Q1, $173 million Bitcoin loss
+2026-05-08T20:38:08.486Z	1486432	charts_and_maps	2	672	0	2	9.2	280679	21257	recent@econ|top@econ|recent@charts_and_maps	SIGNAL	How Government Debt Has Diverged Across Major Economies (2005–2025)
+2026-05-08T20:38:08.486Z	1486386	Stacker_Stocks	2	659	0	2	10.5	51481	4010	recent@Stacker_Stocks|top@Stacker_Stocks	SIGNAL	IREN inks AI infrastructure deal with Nvidia
+2026-05-08T20:38:08.486Z	1486585	security	1	644	0	0	5.8	12309	3448	recent@security|top@security|recent@tech	SIGNAL	Behind the Scenes Hardening Firefox with Claude Mythos Preview
+2026-05-08T20:38:08.486Z	1486602	DIY	3	592	0	6	5.0	370699	240	recent@nostr|top@nostr	SIGNAL,SELF_POST_OPP	Building on nostr is really fun
+2026-05-08T20:38:08.486Z	1486704	bitcoin	1	568	0	4	2.5	435224	1498	recent@bitcoin|top@bitcoin|recent@bitcoin_beginners	SIGNAL	What’s the biggest barrier to Bitcoin adoption right now?
+2026-05-08T20:38:08.486Z	1486431	bitcoin_beginners	1	484	0	0	9.2	30782	24693	recent@bitcoin_beginners|top@bitcoin_beginners	SIGNAL	Bitcoin Beginners Newsletter, Issue 100
+2026-05-08T20:38:08.486Z	1486473	bitcoin	1	481	0	5	8.3	74100	9770	recent@bitcoin|top@bitcoin|recent@bitcoin_Mining	SIGNAL	Two Solo Blocks, One Operator, Over $500,000 - Solo Satoshi
+2026-05-08T20:38:08.486Z	1486599	bitcoin	1	407	0	3	5.3	74100	9770	recent@bitcoin|top@bitcoin|recent@bitdevs	SIGNAL	Roulette in a Bitcoin Payment Channel - Robin Linus
+2026-05-08T20:38:08.486Z	1486542	AI	1	301	0	1	6.5	48657	13647	recent@AI|top@AI	SIGNAL	Looks like folks on Reddit can't spot clankers the way we can
+2026-05-08T20:38:08.486Z	1486594	bitcoin	1	282	0	0	5.6	74100	9770	recent@bitcoin|top@bitcoin|recent@bitcoinplusplus	SIGNAL	Oxford Debate: Quantum FUD vs Quantum Compute | bitcoin ++ | villain edition
+2026-05-08T20:38:08.486Z	1486641	news	2	264	0	0	4.1	1473856	6	recent@bitcoin|top@bitcoin|recent@news	SIGNAL	Pick n Pay Adds Bitcoin at Thousands of Stores. The Numbers Are Compounding
+2026-05-08T20:38:08.486Z	1486518	Stacker_Stocks	2	250	0	1	7.1	934429	276	recent@Stacker_Stocks|top@Stacker_Stocks	SIGNAL	Japan Has Spent Over $200 Billion Defending the Yen Since 2022
+2026-05-08T20:38:08.486Z	1486688	bitcoin	1	240	0	0	2.8	900198	105	recent@bitcoin|top@bitcoin|recent@bitcoin_beginners	SIGNAL	🎉 First Contributor on Satoshi Dashboard!
+2026-05-08T20:38:08.486Z	1486578	tech	1	209	0	2	6.2	12309	3448	recent@privacy|top@privacy|recent@tech	SIGNAL	Google Cloud Fraud Defense the next evolution of reCAPTCHA to kill the open web
+2026-05-08T20:38:08.486Z	1486616	news	2	166	0	0	4.7	51481	4010	recent@news|top@news	SIGNAL	Suspected oil spill seen on satellite images near Iran's Kharg Island export hub
+2026-05-08T20:38:08.486Z	1486509	bitcoin	1	159	0	5	7.6	74100	9770	recent@bitcoin|top@bitcoin	SIGNAL	Bitnodes.io shutting down?
+2026-05-08T20:38:08.486Z	1486615	Stacker_Stocks	2	144	0	0	4.8	328182	3636	recent@Stacker_Stocks|top@Stacker_Stocks	SIGNAL	Lime, the Uber-backed micromobility company, files for IPO
+2026-05-08T20:38:08.486Z	1486722	lol	2	141	0	0	1.9	1293586	1780	recent@lol|top@lol	FRESH,SIGNAL	Oh dear...Here we go again
+2026-05-08T20:38:08.486Z	1486683	bitcoin	1	123	0	0	3.1	74100	9770	recent@bitcoin|top@bitcoin|recent@devs	SIGNAL	Second releases python barkd client
+2026-05-08T20:38:08.486Z	1486636	AI	1	123	0	0	4.2	12309	3448	recent@AI|top@AI	SIGNAL	AMD announces MI350P PCIe AI accelerator card with 144GB of HBM3E
+2026-05-08T20:38:08.486Z	1486439	econ	2	123	0	0	9.0	303620	5947	recent@econ|top@econ	SIGNAL	Zeihan on the Current Stock Market
+2026-05-08T20:38:08.486Z	1486397	bitcoin	1	123	0	0	9.9	168586	2600	recent@podcasts|top@podcasts	SIGNAL	Discovering Bitcoin #171 • Disccovering Bitcoin with Kontext
+2026-05-08T20:38:08.486Z	1486536	lol	2	121	0	4	6.7	458256	4596	recent@lol|top@lol	SIGNAL	Petition calling for Mbappé to leave Real tops 30 million signatures
+2026-05-08T20:38:08.486Z	1486497	Stacker_Stocks	2	111	0	13	8.0	9274	22202	recent@Stacker_Stocks|top@Stacker_Stocks	SIGNAL	Daily Stock Discussion ~Stacker_Stocks
