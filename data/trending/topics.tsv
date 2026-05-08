@@ -1,42 +1,42 @@
 # topic	sources	score	seen_in_sn	rising_flag
-# generated 2026-05-07T16:27:47.088Z; n=40
-what	sn:AskSN,sn:food_and_drinks	5.95	yes	
-venezuela	sn:Politics_And_Law	4.08	no	RISING
-agent	hn	3.5	no	RISING
-photographing	sn:Photography	3.36	no	RISING
-introducing	sn:Photography	3.33	no	RISING
-noice	sn:Photography	3.33	no	RISING
-review	sn:BooksAndArticles	3.31	no	RISING
-red city	sn:BooksAndArticles	3.31	no	RISING
-marie lu	sn:BooksAndArticles	3.31	no	RISING
-valve	hn	3.22	no	RISING
-steam controller	hn	3.22	no	RISING
-creative commons	hn	3.22	no	RISING
-territory	sn:art	3.19	no	RISING
-announcement	sn:art	3.19	no	RISING
-unchained	sn:AskSN	3.17	yes	
-the atlantic	sn:AskSN	3.17	yes	
-appearing	hn	3.16	no	RISING
-self-boost	sn:meta	3.05	yes	
-stock printer going	sn:Stacker_Stocks	3.05	no	RISING
-money stuff	sn:Stacker_Stocks	3.05	no	RISING
-matt levine	sn:Stacker_Stocks	3.05	no	RISING
-bitcoin asic profitability map	sn:bitcoin	2.9	yes	
-lolli	sn:lightning	2.89	no	RISING
-fields	sn:tech	2.86	yes	
-the world explorer	sn:tech	2.86	yes	
-agricultural	sn:tech	2.86	yes	
-vibe	hn	2.85	no	RISING
-verify	sn:meta	2.84	yes	
-trust	sn:meta	2.84	yes	
-grand bazaar	sn:meta	2.84	yes	
-accountability	sn:meta	2.84	yes	
-muhtasib	sn:meta	2.84	yes	
-the blind spot	sn:meta	2.84	yes	
-spams	sn:bitcoin	2.83	yes	
-scams	sn:bitcoin	2.83	yes	
-bitcoin	sn:bitcoin	2.83	yes	
-limited blockspace	sn:bitcoin	2.83	yes	
-fees	sn:bitcoin	2.83	yes	
-french	sn:art	2.82	no	RISING
-nobel	sn:art	2.82	no	RISING
+# generated 2026-05-08T05:47:59.947Z; n=40
+verify	sn:math,sn:meta	7.35	yes	
+announcement	sn:art,sn:AMA	6.2	no	RISING
+cryptography primer	sn:math	4.05	no	RISING
+keygen	sn:math	4.05	no	RISING
+encrypt	sn:math	4.05	no	RISING
+decrypt	sn:math	4.05	no	RISING
+sign	sn:math	4.05	no	RISING
+territory	sn:art	3.5	no	RISING
+mitigating undercutting attacks	sn:bitcoin	3.43	yes	
+mining	sn:bitcoin	3.43	yes	
+tx fee behavior	sn:bitcoin	3.43	yes	
+claire bao	sn:bitcoin	3.43	yes	
+introducing	sn:Photography	3.38	no	RISING
+noice	sn:Photography	3.38	no	RISING
+trust	sn:meta	3.31	yes	
+grand bazaar	sn:meta	3.31	yes	
+accountability	sn:meta	3.31	yes	
+muhtasib	sn:meta	3.31	yes	
+the blind spot	sn:meta	3.31	yes	
+now live	sn:AI	3.26	yes	
+jamie podcast search	sn:AI	3.26	yes	
+governor	sn:news	3	yes	
+carabobo state	sn:news	3	yes	
+venezuela	sn:news	3	yes	
+french	sn:art	2.95	no	RISING
+nobel	sn:art	2.95	no	RISING
+more	sn:charts_and_maps	2.94	no	RISING
+discussion thread	sn:Stacker_Sports	2.92	no	RISING
+territory post	sn:meta	2.9	yes	
+comment cost	sn:meta	2.9	yes	
+raise	sn:lol	2.88	yes	
+pre event	sn:AI	2.84	yes	
+expo kickoff	sn:AI	2.84	yes	
+trying	sn:bitcoin_Mining	2.78	no	RISING
+mining block party	sn:bitcoin_Mining	2.78	no	RISING
+boost	sn:bitcoin_Mining	2.78	no	RISING
+crowd	sn:bitcoin_Mining	2.78	no	RISING
+burning man	hn	2.77	no	RISING
+programming still sucks	hn	2.74	no	RISING
+memory	sn:bitcoin_beginners	2.74	no	RISING
