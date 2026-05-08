@@ -1,42 +1,42 @@
 # topic	sources	score	seen_in_sn	rising_flag
-# generated 2026-05-08T05:47:59.947Z; n=40
-verify	sn:math,sn:meta	7.35	yes	
-announcement	sn:art,sn:AMA	6.2	no	RISING
-cryptography primer	sn:math	4.05	no	RISING
-keygen	sn:math	4.05	no	RISING
-encrypt	sn:math	4.05	no	RISING
-decrypt	sn:math	4.05	no	RISING
-sign	sn:math	4.05	no	RISING
-territory	sn:art	3.5	no	RISING
+# generated 2026-05-08T15:10:54.460Z; n=40
+universal linux	hn,sn:tech	5.72	yes	
+cryptography primer	sn:math	4.18	no	RISING
+keygen	sn:math	4.18	no	RISING
+encrypt	sn:math	4.18	no	RISING
+decrypt	sn:math	4.18	no	RISING
+sign	sn:math	4.18	no	RISING
+verify	sn:math	4.18	yes	
 mitigating undercutting attacks	sn:bitcoin	3.43	yes	
 mining	sn:bitcoin	3.43	yes	
 tx fee behavior	sn:bitcoin	3.43	yes	
 claire bao	sn:bitcoin	3.43	yes	
-introducing	sn:Photography	3.38	no	RISING
-noice	sn:Photography	3.38	no	RISING
-trust	sn:meta	3.31	yes	
-grand bazaar	sn:meta	3.31	yes	
-accountability	sn:meta	3.31	yes	
-muhtasib	sn:meta	3.31	yes	
-the blind spot	sn:meta	3.31	yes	
+zeus	sn:bitcoin	3.29	yes	
 now live	sn:AI	3.26	yes	
 jamie podcast search	sn:AI	3.26	yes	
-governor	sn:news	3	yes	
-carabobo state	sn:news	3	yes	
-venezuela	sn:news	3	yes	
-french	sn:art	2.95	no	RISING
-nobel	sn:art	2.95	no	RISING
-more	sn:charts_and_maps	2.94	no	RISING
-discussion thread	sn:Stacker_Sports	2.92	no	RISING
-territory post	sn:meta	2.9	yes	
-comment cost	sn:meta	2.9	yes	
-raise	sn:lol	2.88	yes	
-pre event	sn:AI	2.84	yes	
-expo kickoff	sn:AI	2.84	yes	
-trying	sn:bitcoin_Mining	2.78	no	RISING
-mining block party	sn:bitcoin_Mining	2.78	no	RISING
-boost	sn:bitcoin_Mining	2.78	no	RISING
-crowd	sn:bitcoin_Mining	2.78	no	RISING
-burning man	hn	2.77	no	RISING
-programming still sucks	hn	2.74	no	RISING
-memory	sn:bitcoin_beginners	2.74	no	RISING
+fingerprinting	sn:bitcoin	3.18	yes	
+bitcoin optech newsletter	sn:bitcoin	3.18	yes	
+fiction	sn:the_stacker_muse	3.06	no	RISING
+contest	sn:the_stacker_muse	3.06	no	RISING
+the colour	sn:the_stacker_muse	3.06	no	RISING
+money	sn:the_stacker_muse	3.06	no	RISING
+cloudflare	hn	3.02	no	RISING
+governor	sn:news	3.01	yes	
+carabobo state	sn:news	3.01	yes	
+venezuela	sn:news	3.01	yes	
+collection	sn:tech	2.99	yes	
+gaussian splat scenes	sn:tech	2.99	yes	
+you can	sn:bitcoin	2.97	yes	
+run forever	sn:bitcoin	2.97	yes	
+building bitcoin sovereignty	sn:bitcoin	2.97	yes	
+inside	sn:bitcoin	2.97	yes	
+discussion thread	sn:Stacker_Sports	2.93	no	RISING
+block inc	sn:Stacker_Stocks	2.93	no	RISING
+bitcoin	sn:Stacker_Stocks	2.93	yes	
+canvas	hn	2.92	no	RISING
+memory	sn:bitcoin_beginners	2.91	no	RISING
+raise	sn:lol	2.9	yes	
+dirtyfrag	hn	2.86	no	RISING
+burning man	hn	2.85	no	RISING
+maybe	hn	2.84	no	RISING
+rumors	hn	2.84	no	RISING
