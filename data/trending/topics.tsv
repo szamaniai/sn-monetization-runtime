@@ -1,42 +1,42 @@
 # topic	sources	score	seen_in_sn	rising_flag
-# generated 2026-05-09T06:28:03.211Z; n=40
-fiction	sn:the_stacker_muse	8.76	no	RISING
-contest	sn:the_stacker_muse	8.76	no	RISING
-release	sn:aliens_and_UFOs,sn:bitcoin	6.19	yes	
-bitcoin	sn:Stacker_Stocks,sn:bitcoin	5.85	yes	
-over	hn,sn:bitcoin	4.55	yes	
+# generated 2026-05-09T14:19:58.249Z; n=40
+fiction	sn:the_stacker_muse	8.87	no	RISING
+contest	sn:the_stacker_muse	8.87	no	RISING
+google	hn,sn:tech	6.14	yes	
+de-googled	hn,sn:tech	6.14	yes	
+android	hn,sn:tech	6.14	yes	
+round	sn:Stacker_Sports	5.2	no	RISING
+what	hn,sn:bitcoin	4.85	yes	
 we shall not be horsed about	sn:econ	3.49	no	RISING
 scarcity	sn:econ	3.49	no	RISING
 obsolete jobs	sn:econ	3.49	no	RISING
-zeus	sn:bitcoin	3.36	yes	
 latest strikes	sn:bitcoin	3.28	yes	
 april	sn:bitcoin	3.28	yes	
-fingerprinting	sn:bitcoin	3.18	yes	
-bitcoin optech newsletter	sn:bitcoin	3.18	yes	
-snooze	sn:meta	3.17	yes	
-cryptography primer	sn:bitcoin	3.14	yes	
-the colour	sn:the_stacker_muse	3.09	no	RISING
-money	sn:the_stacker_muse	3.09	no	RISING
-block inc	sn:Stacker_Stocks	3.06	no	RISING
-bitnodes	sn:bitcoin	2.96	yes	
-behind	sn:security	2.96	yes	
-scenes hardening firefox	sn:security	2.96	yes	
-claude mythos preview	sn:security	2.96	yes	
-google	hn	2.94	no	RISING
-de-googled	hn	2.94	no	RISING
-android	hn	2.94	no	RISING
-personal remittances	sn:charts_and_maps	2.94	no	RISING
-official development assistance received	sn:charts_and_maps	2.94	no	RISING
-playoffs	sn:Stacker_Sports	2.86	no	RISING
-discussion thread	sn:Stacker_Sports	2.86	no	RISING
-weekly random sports pick	sn:Stacker_Sports	2.85	no	RISING
-dangerous	sn:the_stacker_muse	2.85	no	RISING
-how government debt has diverged across major economies	sn:charts_and_maps	2.83	no	RISING
-beneath the surface	sn:the_stacker_muse	2.82	no	RISING
-iren	sn:Stacker_Stocks	2.82	no	RISING
-nvidia	sn:Stacker_Stocks	2.82	yes	
-trying something	sn:the_stacker_muse	2.81	no	RISING
-first time	sn:the_stacker_muse	2.81	no	RISING
+beneath the surface	sn:the_stacker_muse	3.24	no	RISING
+snooze	sn:meta	3.2	yes	
+cryptography primer	sn:bitcoin	3.15	yes	
+writing	sn:the_stacker_muse	3.04	no	RISING
+prompt	sn:the_stacker_muse	3.04	no	RISING
+strange frames	sn:the_stacker_muse	3.04	no	RISING
+behind	sn:AI	2.98	yes	
+scenes hardening firefox	sn:AI	2.98	yes	
+claude mythos preview	sn:AI	2.98	yes	
+personal remittances	sn:charts_and_maps	2.95	no	RISING
+official development assistance received	sn:charts_and_maps	2.95	no	RISING
+weekly random sports pick	sn:Stacker_Sports	2.88	no	RISING
+playoffs	sn:Stacker_Sports	2.87	no	RISING
+discussion thread	sn:Stacker_Sports	2.87	no	RISING
+david attenborough	hn	2.86	no	RISING
+birthday	hn	2.86	no	RISING
+dangerous	sn:the_stacker_muse	2.86	no	RISING
+bitcoin	sn:bitcoin	2.83	yes	
 help	sn:Stacker_Sports	2.8	no	RISING
-what	sn:bitcoin	2.79	yes	
 roulette	sn:bitcoin	2.78	yes	
+bitcoin payment channel	sn:bitcoin	2.78	yes	
+robin linus	sn:bitcoin	2.78	yes	
+the colour	sn:the_stacker_muse	2.78	no	RISING
+money	sn:the_stacker_muse	2.78	no	RISING
+hola	sn:art	2.77	yes	
+stacker news	sn:art	2.77	yes	
+alby	sn:art	2.77	yes	
+saludos	sn:art	2.77	yes	
