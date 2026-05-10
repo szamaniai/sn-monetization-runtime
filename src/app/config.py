@@ -1,15 +1,15 @@
+python
 # src/app/config.py
 """
 Configuration module for the StackExchange bounty microservice.
 
 Provides a single source of truth for application settings using
-`pydantic.BaseSettings`. Settings can be loaded from environment variables,
+``pydantic.BaseSettings``. Settings can be loaded from environment variables,
 a ``.env`` file, or directly via constructor arguments.
 
 Typical usage
 -------------
->>> from app.config import Settings
->>> settings = Settings()
+>>> from app.config import Settings, settings
 >>> settings.database_url
 'postgresql+psycopg2://user:pass@db:5432/bounty'
 
@@ -22,7 +22,7 @@ from __future__ import annotations
 import logging
 import sys
 from pathlib import Path
-from typing import Literal, Sequence
+from typing import Literal, List, Sequence, Final, overload
 
 from pydantic import (
     AnyUrl,
@@ -36,19 +36,19 @@ from pydantic import (
 # --------------------------------------------------------------------------- #
 # Logging configuration
 # --------------------------------------------------------------------------- #
-LOGGER_NAME = "bounty_service"
+LOGGER_NAME: Final = "bounty_service"
 logger = logging.getLogger(LOGGER_NAME)
+
 if not logger.handlers:
     # Configure a simple console logger only once
-    handler = logging.StreamHandler(sys.stdout)
-    formatter = logging.Formatter(
+    _handler = logging.StreamHandler(sys.stdout)
+    _formatter = logging.Formatter(
         fmt="[%(asctime)s] %(levelname)s %(name)s - %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
+    _handler.setFormatter(_formatter)
+    logger.addHandler(_handler)
     logger.setLevel(logging.INFO)
-
 
 # --------------------------------------------------------------------------- #
 # Settings model
@@ -74,7 +74,7 @@ class Settings(BaseSettings):
         Base URL of the StackExchange API used to fetch the CSV feed.
     stackexchange_api_key: str | None
         Optional API key for higher rate limits.
-    allowed_tags: Sequence[str]
+    allowed_tags: List[str]
         Tags that are considered when filtering bounties.
     max_concurrent_requests: int
         Maximum number of concurrent HTTP requests the worker may issue.
@@ -112,7 +112,7 @@ class Settings(BaseSettings):
     # ------------------------------------------------------------------- #
     # Business‑logic configuration
     # ------------------------------------------------------------------- #
-    allowed_tags: Sequence[str] = Field(
+    allowed_tags: List[str] = Field(
         default_factory=lambda: ["python", "javascript", "java"],
         description="Tags to include when filtering bounties",
     )
@@ -145,6 +145,10 @@ class Settings(BaseSettings):
     def _apply_logging_level(self) -> "Settings":
         """
         Apply the configured log level to the module logger.
+
+        The logger level is set once the settings are instantiated,
+        ensuring that all subsequent log statements respect the user‑defined
+        configuration.
         """
         level = getattr(logging, self.log_level.upper(), logging.INFO)
         logger.setLevel(level)
@@ -155,16 +159,58 @@ class Settings(BaseSettings):
     def _validate_allowed_tags(self) -> "Settings":
         """
         Ensure that at least one allowed tag is defined.
+
+        Raises
+        ------
+        ValueError
+            If ``allowed_tags`` is empty.
         """
         if not self.allowed_tags:
             raise ValueError("`allowed_tags` must contain at least one tag")
         logger.debug("Allowed tags: %s", self.allowed_tags)
         return self
 
+    @model_validator(mode="after")
+    def _validate_log_level(self) -> "Settings":
+        """
+        Validate that ``log_level`` is one of the supported literals.
+        """
+        if self.log_level not in {"DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"}:
+            raise ValueError(f"Invalid log_level: {self.log_level}")
+        return self
+
+    # ------------------------------------------------------------------- #
+    # Security‑aware representation
+    # ------------------------------------------------------------------- #
+    def __repr__(self) -> str:
+        """
+        Return a representation that masks sensitive fields such as
+        ``stackexchange_api_key``.
+        """
+        masked_key = (
+            f"{self.stackexchange_api_key[:4]}...{self.stackexchange_api_key[-4:]}"
+            if self.stackexchange_api_key
+            else None
+        )
+        return (
+            f"{self.__class__.__name__}(environment={self.environment!r}, "
+            f"database_url={self.database_url!r}, poll_interval_seconds={self.poll_interval_seconds!r}, "
+            f"stackexchange_api_base={self.stackexchange_api_base!r}, "
+            f"stackexchange_api_key={masked_key!r}, allowed_tags={self.allowed_tags!r}, "
+            f"max_concurrent_requests={self.max_concurrent_requests!r}, log_level={self.log_level!r})"
+        )
+
 
 # --------------------------------------------------------------------------- #
 # Helper to load settings safely
 # --------------------------------------------------------------------------- #
+def _mask_secret(value: str | None) -> str | None:
+    """Utility to mask secrets for logging."""
+    if value is None:
+        return None
+    return f"{value[:4]}...{value[-4:]}" if len(value) > 8 else "*****"
+
+
 def load_settings() -> Settings:
     """
     Load the application settings, handling validation errors gracefully.
@@ -182,15 +228,24 @@ def load_settings() -> Settings:
     try:
         settings = Settings()
         logger.info(
-            "Settings loaded: env=%s, db=%s",
+            "Settings loaded: env=%s, db=%s, api_key=%s",
             settings.environment,
             settings.database_url,
+            _mask_secret(settings.stackexchange_api_key),
         )
         return settings
     except ValidationError as exc:
-        logger.("Configuration validation error: %s", exc)
+        logger.error("Configuration validation error: %s", exc)
+        sys.exit(1)
+    except Exception as exc:  # pragma: no cover – defensive catch‑all
+        logger.exception("Unexpected error while loading configuration")
         sys.exit(1)
 
 
 # Export a singleton that can be imported elsewhere
 settings: Settings = load_settings()
+
+# --------------------------------------------------------------------------- #
+# Public API
+# --------------------------------------------------------------------------- #
+__all__: List[str] = ["Settings", "settings", "load_settings"]

@@ -1,3 +1,4 @@
+python
 # src/app/api/v1/bounties.py
 """FastAPI router for bounty endpoints.
 
@@ -12,7 +13,7 @@ All routes delegate to the service layer and return Pydantic models.
 from __future__ import annotations
 
 import logging
-from typing import List, Optional
+from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 
@@ -54,9 +55,19 @@ async def list_bounties(
 
     Returns:
         A list of :class:`BountyOut` objects.
+
+    Raises:
+        HTTPException: If an unexpected error occurs while fetching data.
     """
     log.debug("Listing bounties – skip=%s, limit=%s", skip, limit)
-    bounties = await service.list_bounties(skip=skip, limit=limit)
+    try:
+        bounties = await service.list_bounties(skip=skip, limit=limit)
+    except Exception as exc:  # pragma: no cover
+        log.exception("Failed to list bounties")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Unable to retrieve bounties at this time.",
+        ) from exc
     return bounties
 
 
@@ -78,13 +89,21 @@ async def get_bounty(
         service: Business‑logic service injected by FastAPI.
 
     Raises:
-        HTTPException: If the bounty does not exist.
+        HTTPException: If the bounty does not exist or an internal error occurs.
 
     Returns:
         A :class:`BountyOut` instance.
     """
     log.debug("Fetching bounty with id=%s", bounty_id)
-    bounty = await service.get_bounty_by_id(bounty_id)
+    try:
+        bounty = await service.get_bounty_by_id(bounty_id)
+    except Exception as exc:  # pragma: no cover
+        log.exception("Error while fetching bounty id=%s", bounty_id)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Unable to retrieve the bounty at this time.",
+        ) from exc
+
     if bounty is None:
         log.warning("Bounty not found – id=%s", bounty_id)
         raise HTTPException(
@@ -111,16 +130,37 @@ async def search_bounties(
     Search bounties using a simple case‑insensitive substring match.
 
     Args:
-        query: Text to search for.
+        query: Text to search for. Whitespace is stripped before processing.
         service: Business‑logic service injected by FastAPI.
         skip: Pagination offset.
         limit: Pagination size.
 
     Returns:
         A list of matching :class:`BountyOut` objects.
+
+    Raises:
+        HTTPException: If an unexpected error occurs during the search.
     """
-    log.debug("Searching bounties – query=%r, skip=%s, limit=%s", query, skip, limit)
-    results = await service.search_bounties(query=query, skip=skip, limit=limit)
+    sanitized_query = query.strip()
+    if not sanitized_query:
+        log.info("Empty search query received; returning empty result set")
+        return []
+
+    log.debug(
+        "Searching bounties – query=%r, skip=%s, limit=%s",
+        sanitized_query,
+        skip,
+        limit,
+    )
+    try:
+        results = await service.search_bounties(query=sanitized_query, skip=skip, limit=limit)
+    except Exception as exc:  # pragma: no cover
+        log.exception("Search failed for query=%r", sanitized_query)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Unable to perform search at this time.",
+        ) from exc
+
     if not results:
-        log.info("No bounties matched query=%r", query)
+        log.info("No bounties matched query=%r", sanitized_query)
     return results

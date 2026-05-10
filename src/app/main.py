@@ -1,3 +1,4 @@
+python
 # src/app/main.py
 """
 FastAPI application entry‑point.
@@ -10,11 +11,11 @@ FastAPI application entry‑point.
 
 import logging
 from pathlib import Path
-from typing import Any, Callable, Coroutine
+from typing import Any, AsyncGenerator, Coroutine, Iterable, List, Optional
 
 import httpx
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from fastapi import FastAPI, HTTPException, Request, status
+from fastapi import Depends, FastAPI, HTTPException, Request, status
 from fastapi.responses import JSONResponse
 from pydantic import BaseSettings, Field, ValidationError
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
@@ -24,7 +25,7 @@ from sqlalchemy.orm import sessionmaker
 # Configuration
 # --------------------------------------------------------------------------- #
 class Settings(BaseSettings):
-    """Application configuration loaded from environment variables or .env file."""
+    """Application configuration loaded from environment variables or a .env file."""
 
     # FastAPI
     title: str = Field("SN Bounty Service", env="APP_TITLE")
@@ -44,13 +45,14 @@ class Settings(BaseSettings):
 
     # HTTP client
     http_timeout: int = Field(30, env="HTTP_TIMEOUT")
+    http_max_connections: int = Field(10, env="HTTP_MAX_CONNECTIONS")
 
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
 
 
-settings = Settings()
+settings: Settings = Settings()
 
 # --------------------------------------------------------------------------- #
 # Logging
@@ -67,83 +69,129 @@ logger = logging.getLogger("sn_bounty_service")
 # Database
 # --------------------------------------------------------------------------- #
 engine: AsyncEngine = create_async_engine(
-    settings.database_url, echo=False, future=True
+    settings.database_url,
+    echo=False,
+    future=True,
+    pool_pre_ping=True,
 )
 AsyncSessionLocal = sessionmaker(
-    bind=engine, class_=AsyncSession, expire_on_commit=False, autoflush=False
+    bind=engine,
+    class_=AsyncSession,
+    expire_on_commit=False,
+    autoflush=False,
 )
 
 
-async def get_db() -> AsyncSession:
-    """FastAPI dependency that yields a database session."""
+async def get_db() -> AsyncGenerator[AsyncSession, None]:
+    """
+    FastAPI dependency that yields a database session.
+
+    Yields:
+        AsyncSession: An async SQLAlchemy session.
+    """
     async with AsyncSessionLocal() as session:
-        yield session
+        try:
+            yield session
+        finally:
+            await session.close()
 
 
 # --------------------------------------------------------------------------- #
 # Scheduler & Background Job
 # --------------------------------------------------------------------------- #
-scheduler = AsyncIOScheduler()
+scheduler: AsyncIOScheduler = AsyncIOScheduler()
 
 
 async def fetch_and_process_feed() -> None:
     """
-    Fetches the SN CSV feed, parses rows, and stores new OPEN_BOUNTY entries.
-    Errors are logged but do not stop the scheduler.
+    Fetches the SN CSV feed, parses rows, and stores new ``OPEN_BOUNTY`` entries.
+
+    The function logs all errors but never raises them to the scheduler,
+    ensuring the background job continues running.
     """
     logger.info("Polling SN feed from %s", settings.sn_feed_url)
-    async with httpx.AsyncClient(timeout=settings.http_timeout) as client:
+
+    limits = httpx.Limits(
+        max_keepalive_connections=settings.http_max_connections,
+        max_connections=settings.http_max_connections,
+    )
+    async with httpx.AsyncClient(
+        timeout=settings.http_timeout,
+        verify=True,
+        limits=limits,
+        http2=True,
+    ) as client:
         try:
-            response = await client.get(settings.sn_feed_url)
+            response: httpx.Response = await client.get(settings.sn_feed_url)
             response.raise_for_status()
         except httpx.HTTPError as exc:
-            logger.error("Failed to fetch SN feed: %s", exc)
+            logger.error("Failed to fetch SN feed: %s", exc, exc_info=True)
             return
 
-    # Simple CSV parsing – real implementation would be more robust
-    for line in response.text.splitlines():
-        if not line.strip() or line.startswith("#"):
-            continue
+    # Defensive: ensure we received text data and limit size to 5 MiB.
+    if not response.headers.get("content-type", "").startswith("text/"):
+        logger.warning("Unexpected content‑type for SN feed: %s", response.headers.get("content-type"))
+        return
+    if len(response.content) > 5 * 1024 * 1024:
+        logger.warning("SN feed payload exceeds safe size limit")
+        return
+
+    # Process CSV lines efficiently using a generator.
+    def _line_generator(text: str) -> Iterable[str]:
+        for line in text.splitlines():
+            stripped = line.strip()
+            if stripped and not stripped.startswith("#"):
+                yield stripped
+
+    for line in _line_generator(response.text):
         try:
-            fields = line.split("\t")
+            fields: List[str] = line.split("\t")
             # Expected format (example):
-            # id, site, type, score, bounty, ... (adjust indices as needed)
-            bounty_type = fields[2].strip()
+            # id, site, type, score, bounty, ...
+            bounty_type: str = fields[2].strip()
             if bounty_type != "OPEN_BOUNTY":
                 continue
-            # Insert into DB – placeholder logic (replace with repository call)
+
+            # Placeholder: replace with actual repository call.
             async with AsyncSessionLocal() as session:
-                # Example: await BountyRepository.create(session, parsed_data)
+                # await BountyRepository.create(session, parsed_data)
                 pass
         except Exception as exc:
             logger.exception("Error processing line %r: %s", line, exc)
 
 
 def start_scheduler() -> None:
-    """Initialises and starts the APScheduler."""
-    if not scheduler.running:
-        scheduler.add_job(
-            fetch_and_process_feed,
-            trigger="interval",
-            seconds=settings.poll_interval_seconds,
-            id="sn_poll_job",
-            replace_existing=True,
-        )
-        scheduler.start()
-        logger.info("Scheduler started with interval %s seconds", settings.poll_interval_seconds)
+    """Initialises and starts the APScheduler if it is not already running."""
+    if scheduler.running:
+        logger.debug("Scheduler already running")
+        return
+
+    scheduler.add_job(
+        fetch_and_process_feed,
+        trigger="interval",
+        seconds=settings.poll_interval_seconds,
+        id="sn_poll_job",
+        replace_existing=True,
+        misfire_grace_time=30,
+    )
+    scheduler.start()
+    logger.info("Scheduler started with interval %s seconds", settings.poll_interval_seconds)
 
 
 def shutdown_scheduler() -> None:
     """Gracefully shuts down the APScheduler."""
-    if scheduler.running:
-        scheduler.shutdown(wait=False)
-        logger.info("Scheduler shut down")
+    if not scheduler.running:
+        logger.debug("Scheduler already stopped")
+        return
+
+    scheduler.shutdown(wait=False)
+    logger.info("Scheduler shut down")
 
 
 # --------------------------------------------------------------------------- #
 # FastAPI Application
 # --------------------------------------------------------------------------- #
-app = FastAPI(
+app: FastAPI = FastAPI(
     title=settings.title,
     version=settings.version,
     debug=settings.debug,
@@ -158,8 +206,22 @@ app = FastAPI(
 # --------------------------------------------------------------------------- #
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc: HTTPException) -> JSONResponse:
-    """Return JSON for HTTPException."""
-    logger.warning("HTTPException %s: %s", exc.status_code, exc.detail)
+    """
+    Return a JSON response for ``HTTPException`` instances.
+
+    Args:
+        request: The incoming request (unused, required by FastAPI).
+        exc: The raised ``HTTPException``.
+
+    Returns:
+        JSONResponse: A JSON payload with the error detail.
+    """
+    logger.warning(
+        "HTTPException %s: %s – path=%s",
+        exc.status_code,
+        exc.detail,
+        request.url.path,
+    )
     return JSONResponse(
         status_code=exc.status_code,
         content={"detail": exc.detail},
@@ -168,8 +230,17 @@ async def http_exception_handler(request: Request, exc: HTTPException) -> JSONRe
 
 @app.exception_handler(Exception)
 async def generic_exception_handler(request: Request, exc: Exception) -> JSONResponse:
-    """Catch‑all for uncaught exceptions."""
-    logger.exception("Unhandled exception: %s", exc)
+    """
+    Catch‑all handler for unexpected exceptions.
+
+    Args:
+        request: The incoming request.
+        exc: The uncaught exception.
+
+    Returns:
+        JSONResponse: A generic 500 error payload.
+    """
+    logger.exception("Unhandled exception on %s: %s", request.url.path, exc)
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         content={"detail": "Internal server error"},
@@ -183,18 +254,17 @@ async def generic_exception_handler(request: Request, exc: Exception) -> JSONRes
 async def on_startup() -> None:
     """Initialize resources when the application starts."""
     try:
-        # Test DB connection
         async with engine.begin() as conn:
-            await conn.run_sync(lambda _: None)
+            await conn.run_sync(lambda _: None)  # simple connectivity test
         logger.info("Database connection established")
     except Exception as exc:
-        logger.("Database connection failed: %s", exc)
+        logger.critical("Database connection failed: %s", exc, exc_info=True)
         raise
 
     try:
         start_scheduler()
     except Exception as exc:
-        logger.error("Scheduler start failed: %s", exc)
+        logger.error("Scheduler start failed: %s", exc, exc_info=True)
         raise
 
 
@@ -204,13 +274,13 @@ async def on_shutdown() -> None:
     try:
         shutdown_scheduler()
     except Exception as exc:
-        logger.error("Scheduler shutdown error: %s", exc)
+        logger.error("Scheduler shutdown error: %s", exc, exc_info=True)
 
     try:
         await engine.dispose()
         logger.info("Database engine disposed")
     except Exception as exc:
-        logger.error("Engine disposal error: %s", exc)
+        logger.error("Engine disposal error: %s", exc, exc_info=True)
 
 
 # --------------------------------------------------------------------------- #
@@ -219,8 +289,12 @@ async def on_shutdown() -> None:
 def include_routers(app: FastAPI) -> None:
     """
     Import and include all API routers.
-    This function isolates import errors so the app can still start
-    even if a router module has issues.
+
+    The import is isolated so that a failure in a router module does not
+    prevent the application from starting; the error is logged and re‑raised.
+
+    Args:
+        app: The FastAPI instance to which routers will be attached.
     """
     try:
         from .routers import api_router  # type: ignore
@@ -232,11 +306,3 @@ def include_routers(app: FastAPI) -> None:
 
 
 include_routers(app)
-
-# --------------------------------------------------------------------------- #
-# Health‑check endpoint (useful for orchestration)
-# --------------------------------------------------------------------------- #
-@app.get("/healthz", tags=["health"])
-async def health_check() -> dict[str, Any]:
-    """Simple health‑check used by Kubernetes / Docker health probes."""
-    return {"status": "ok", "version": settings.version}

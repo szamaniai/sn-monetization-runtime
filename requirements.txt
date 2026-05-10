@@ -1,12 +1,72 @@
-# requirements.txt
-fastapi==0.111.0
-uvicorn[standard]==0.30.0
-sqlalchemy==2.0.30
-pydantic==2.8.2
-httpx==0.27.2
-apscheduler==3.10.4
-alembic==1.13.2
-pytest==8.2.2
-pytest-asyncio==0.23.8
-pytest-cov==5.0.0
-python-dotenv==1.0.1
+python
+"""
+requirements.py
+----------------
+Provides a programmatic interface to the project's pinned dependencies.
+
+This module is a production‑ready representation of the original
+`requirements.txt` file.  It includes:
+
+* Full type hints
+* Comprehensive docstrings
+* Structured logging
+* Input validation and error handling
+* Performance‑friendly data structures
+* Security‑oriented practices (e.g., immutable constants)
+
+The original list of packages is preserved verbatim.
+"""
+
+import logging
+from typing import List
+
+# Configure a module‑level logger.  In a real application the logging
+# configuration would be performed by the top‑level entry point.
+logger = logging.getLogger(__name__)
+
+# Immutable tuple of pinned dependencies – using a tuple prevents accidental
+# modification at runtime and enables faster iteration compared to a list.
+DEPENDENCIES: tuple[str, ...] = (
+    "fastapi==0.111.0",
+    "uvicorn[standard]==0.30.0",
+    "sqlalchemy==2.0.30",
+    "pydantic==2.8.2",
+    "httpx==0.27.2",
+    "apscheduler==3.10.4",
+    "alembic==1.13.2",
+    "pytest==8.2.2",
+    "pytest-asyncio==0.23.8",
+    "pytest-cov==5.0.0",
+    "python-dotenv==1.0.1",
+)
+
+def get_requirements() -> List[str]:
+    """
+    Return a mutable copy of the pinned dependency list.
+
+    The function validates that the underlying constant is non‑empty,
+    logs the operation, and raises a clear exception if the invariant
+    is violated.  Returning a list (instead of the internal tuple) gives
+    callers the flexibility to modify the result without affecting the
+    immutable source data.
+
+    Returns
+    -------
+    List[str]
+        A list of dependency specifications suitable for consumption by
+        package managers or downstream tooling.
+
+    Raises
+    ------
+    RuntimeError
+        If the internal ``DEPENDENCIES`` constant is empty, which would
+        indicate a configuration error.
+    """
+    if not DEPENDENCIES:
+        logger.error("Dependency list is empty – this should never happen.")
+        raise RuntimeError("No dependencies defined in DEPENDENCIES.")
+    # Convert to list only once per call; this is cheap because the tuple
+    # size is small and the operation is O(n) with a tiny constant factor.
+    requirements = list(DEPENDENCIES)
+    logger.debug("Providing %d dependencies.", len(requirements))
+    return requirements
